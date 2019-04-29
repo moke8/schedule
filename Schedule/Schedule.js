@@ -34,46 +34,43 @@ function Schedule_init (data) {
 
   Schedule_data = data
   let date = new Date()
-  date = new Schedule_con(date)
-  console.log(date.DateStr)
+  date = new Schedule_con(date);//将今日时间传入初始化
+  //
   let Moke_Schedule_SetDateInput = document.getElementsByClassName('Moke_Schedule_SetDateInput')[0]
   Moke_Schedule_SetDateInput.setAttribute('value', date.DateStr)
   Schedule_set(date)
-
+//事件绑定
   {
     {
       document.getElementsByClassName('Moke_Schedule_SetDateInput')[0].addEventListener('change', function () {
-        let date = new Date(this.value)
-        console.log("------"+date);
-        date = new Schedule_con(date)
+        let newDate = new Date(this.value)
+        console.log("------"+newDate);
+        date.SetDate(newDate)
         Schedule_set(date)
       })
     }
     {
       for(let i=0;i<7;i++){
         document.getElementsByClassName('Moke_Schedule_Body_'+i)[0].addEventListener('click', function () {
-          let date = new Date(this.title)
-          date = new Schedule_con(date)
+          let newDate = new Date(this.title)
+          date.SetDate(newDate)
           Schedule_set(date)
         })
       }
     }
     {
       document.getElementsByClassName('Moke_Schedule_SetDatePage_last')[0].addEventListener('click', function () {
-        let date=document.getElementsByClassName("Moke_Schedule_Selected")[0].title;
-        date = new Date(date)
-        date.setDate(date.getDate()-7)
-        date = new Schedule_con(date)
+        let domDate=document.getElementsByClassName("Moke_Schedule_Selected")[0].title;
+        newDate = new Date(domDate)
+        newDate.setDate(newDate.getDate()-7)
+        date.SetDate(newDate)
         Schedule_set(date)
       })
       document.getElementsByClassName('Moke_Schedule_SetDatePage_next')[0].addEventListener('click', function () {
-        let date=document.getElementsByClassName("Moke_Schedule_Selected")[0].title;
-        console.log(date)
-        date = new Date(date)
-        console.log(date)
-        date.setDate(date.getDate()+7)
-        console.log(date)
-        date = new Schedule_con(date)
+        let domDate=document.getElementsByClassName("Moke_Schedule_Selected")[0].title;
+        newDate = new Date(domDate)
+        newDate.setDate(newDate.getDate()+7)
+        date.SetDate(newDate)
         Schedule_set(date)
       })
     }
@@ -106,6 +103,7 @@ function Schedule_con (Date) {
 
 function Schedule_set (date) {
 
+  //当日日程渲染
     let html = ''
     if (typeof Schedule_data[date.Year] !== 'undefined' && typeof Schedule_data[date.Year][date.Month] !== 'undefined' && typeof Schedule_data[date.Year][date.Month][date.Day] !== 'undefined') {  //日程渲染
       let list = Schedule_data[date.Year][date.Month][date.Day]
@@ -116,7 +114,7 @@ function Schedule_set (date) {
 
     }
     document.getElementsByClassName('Moke_Schedule_Events')[0].innerHTML = html
-  //以上没有问题
+
 
   //日历渲染
   let week = date.week;//7-1   6
